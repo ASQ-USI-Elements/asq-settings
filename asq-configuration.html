@@ -1,0 +1,56 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../asq-base/asq-base.html">
+
+<!--
+TODO
+
+@element asq-configuration
+@group ASQ Elements
+@homepage http://github.com/ASQ-USI/asq-configuration
+-->
+<polymer-element name="asq-configuration" hidden>
+  <script>
+    (function() {
+
+      var p = {
+
+        publish: {
+          /**
+           * The maximum number of submissions that are allowed.
+           * 
+           * 0 -> infinite 
+           * 
+           * [1-9]+[0-9]* -> finite 
+           * 
+           * @attribute maxnumsubmissions
+           * @type num
+           * @default 0
+           */
+          maxnumsubmissions: {value: 0, reflect: true},
+
+          /**
+           * Options are *self* and *follow*.
+           * 
+           * @attribute slideflow
+           * @type 'follow' | 'self'
+           * @default 'follow'
+           */
+          slideflow: {value: 'follow', reflect: true},
+
+          /**
+           * assessment
+           * 
+           * @attribute assessment
+           * @type 'self' | 'peer' | 'staff'
+           * @default 'self'
+           */
+          assessment: {value: 'self', reflect: true},
+        }
+      }
+      
+      ASQ.asqify(p);
+      Polymer('asq-configuration', p);
+
+    })();
+  </script>
+</polymer-element>

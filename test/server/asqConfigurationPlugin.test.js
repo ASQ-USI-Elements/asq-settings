@@ -6,8 +6,14 @@ var should = chai.should();
 var expect = chai.expect;
 var cheerio = require('cheerio');
 var Promise = require('bluebird');
+var coroutine = Promise.coroutine;
 var modulePath = "../../lib/asqConfigurationPlugin";
 var fs = require("fs");
+var _ = require('lodash').runInContext();
+
+var isEmptyObjectButNotArray = function(obj) {
+  return _.isObject(obj) && !_.isArray(obj) && _.isEmpty(obj);
+}
 
 describe("asqConfigurationPlugin.js", function(){
   
@@ -43,7 +49,7 @@ describe("asqConfigurationPlugin.js", function(){
     this.asqConfigurationPlugin = require(modulePath);
   });
 
-  describe("parseConf", function(){
+  describe("parseSettings", function(){
 
     beforeEach(function(){
       this.asqConf = new this.asqConfigurationPlugin(this.asq);
@@ -51,46 +57,64 @@ describe("asqConfigurationPlugin.js", function(){
 
 
     it("should return an given object", function(){
-      var result = this.asqConf.parseConf(this.simpleHtml);
+      var result = this.asqConf.parseSettings(this.simpleHtml);
       expect(JSON.stringify(result)).to.equal('{"slideflow":"follow","assessment":"self","maxNumSubmissions":"999"}');
     
     });
 
     it("should deal with only one tag", function(){
-      var result = this.asqConf.parseConf(this.manyHtml);
+      var result = this.asqConf.parseSettings(this.manyHtml);
       expect(JSON.stringify(result)).to.equal('{"slideflow":"follow","assessment":"self","maxNumSubmissions":"999"}')
     });
 
-    it("should return null when there is no asq-configuration", function(){
-     var result = this.asqConf.parseConf(this.emptyHtml);
-     //TODO add <asq-configuration> if there is no one
-     expect(null===result).to.equal(true);
+    it("should return empty object when there is no asq-configuration", function(){
+     var result = this.asqConf.parseSettings(this.emptyHtml);
+
+     expect(isEmptyObjectButNotArray(result)).to.equal(true);
     });
   });
 
-  describe("createSlideshowConf", function(){
+  describe("parseHtml", function(){
 
     before(function(){
-     sinon.stub(this.asqConfigurationPlugin.prototype, "parseConf").returns({});
+      sinon.stub(this.asqConfigurationPlugin.prototype, "parseSettings").returns({});
+      
+      this.option = {
+        slideshow: {
+          getSettings: coroutine(function*(){return {}}),
+          save: function() {
+            return {
+              then: function(fn) {
+                return fn()
+              }
+            }
+          }
+        },
+        html: null
+      }
     });
 
     beforeEach(function(){
       this.asqConf = new this.asqConfigurationPlugin(this.asq);
-      this.asqConfigurationPlugin.prototype.parseConf.reset();
+      this.asqConfigurationPlugin.prototype.parseSettings.reset();
+      
       
     });
 
     after(function(){
-     this.asqConfigurationPlugin.prototype.parseConf.restore();
+      this.asqConfigurationPlugin.prototype.parseSettings.restore();
     });
 
 
-    it("should call parseConf() once", function(){
-      this.asqConf.createSlideshowConf(this.option);
-      this.asqConf.parseConf.calledOnce.should.equal(true);
-    });
+    it("should call parseSettings() once", function(){
+      this.asqConf.parseHtml(this.option);
+      this.asqConf.parseSettings.calledOnce.should.equal(true);
 
-    
+    });
+  });
+
+  describe.skip("updateSlideshowSettings", function(){
+
   });
 
  

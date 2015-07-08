@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('./lib/asqConfigurationPlugin');
+module.exports = require('./lib/asqSettingsPlugin');

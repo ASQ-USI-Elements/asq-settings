@@ -1,11 +1,11 @@
 {
-  "name": "asq-configuration",
-  "version": "0.0.0",
-  "description": "ASQ configuration elements",
+  "name": "asq-settings",
+  "version": "0.1.0",
+  "description": "ASQ settings elements",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ASQ-USI/asq-configuration"
+    "url": "https://github.com/ASQ-USI-Elements/asq-settings"
   },
   "dependencies": {
     "asq-plugin": "ASQ-USI/asq-plugin",

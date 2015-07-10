@@ -19,6 +19,6 @@
     "sinon": "^1.12.2"
   },
   "asq": {
-    "type": "question"
+    "type": "setting"
   }
 }

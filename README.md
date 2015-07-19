@@ -1,1 +1,1 @@
-## ASQ configuration element
+## ASQ settings element

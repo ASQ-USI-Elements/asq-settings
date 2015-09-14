@@ -3,15 +3,16 @@
 <head>
   <meta name="asq-elements" content="width=device-width, initial-scale=1, user-scalable=no">
 
-  <title>ASQ-CONFIGUATION | Demo</title>
+  <title>asq-settings | Demo</title>
 
-  <script src="..//webcomponentsjs/webcomponents.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
 
-  <link href="asq-settings.html" rel="import">
+  <link href="../asq-settings.html" rel="import">
  
   <style shim-shadowdom>
     body {
-      font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+      font-family: 'Helvetica Neue', Helvetica, Arial;
       font-size: 14px;
       margin: 0;
       padding: 24px;
@@ -31,20 +32,9 @@
 </head>
 <body>
 
-<template is="auto-binding">
+<template is="dom-bind">
 
-  <style>
-
-  </style>
-
-  <section>
-
-    
-
-  </section>
-
-  
-
+  <asq-settings></asq-settings>
 
 </template>
 

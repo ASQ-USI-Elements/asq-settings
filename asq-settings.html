@@ -2,19 +2,41 @@
 <link rel="import" href="../asq-base/asq-base.html">
 
 <!--
-TODO
+`asq-settings` allows you to configure your ASQ page, be it a presentation or just exercises. The provided settings override the  default settings of `asq-exercise` elements but not the user provided ones (through attributes).
+
+Example:
+
+    <asq-settings max-num-submissions="2" slideflow="self" assessment="peer"></asq-settings>
+
+
 
 @element asq-settings
+@demo demo/index.html
 @group ASQ Elements
+@blurb Configuration element for ASQ pages
 @homepage http://github.com/ASQ-USI-Elements/asq-settings
 -->
-<polymer-element name="asq-settings" hidden>
+  <style is="custom-style">
+    /* TODO(polyup): For speed, consider reworking these styles with .classes
+                     and #ids rather than [attributes].
+    */
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+  <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<dom-module id="asq-settings">
   <script>
-    (function() {
+    (function () {
+      Polymer({
 
-      var p = {
+        is: 'asq-settings',
 
-        publish: {
+        hostAttributes: {
+          hidden: true
+        },
+
+        properties: {
           /**
            * The maximum number of submissions that are allowed.
            * 
@@ -22,62 +44,60 @@ TODO
            * 0  -> no submissions allowed
            * [1-9]+[0-9]* -> finite 
            * 
-           * @attribute maxnumsubmissions
-           * @type number
-           * @default 1
            */
-          maxnumsubmissions: {value: 1, reflect: true},
+          maxNumSubmissions: {
+            type:Number,
+            value: 1,
+            reflectToAttribute: true
+          },
 
           /**
            * Options are *self* and *follow*.
-           * 
-           * @attribute slideflow
-           * @type 'follow' | 'self'
-           * @default 'follow'
+           * possible values: 'follow' | 'self'
            */
-          slideflow: {value: 'follow', reflect: true},
+          slideflow: {
+            type: String,
+            value: 'follow',
+            reflectToAttribute: true
+          },
 
           /**
            * assessment
-           * 
-           * @attribute assessment
-           * @type 'self' | 'peer' | 'staff'
-           * @default 'self'
+           * possible values: 'self' | 'peer' | 'staff'
            */
-          assessment: {value: 'self', reflect: true},
+          assessment: {
+            type: String,
+            value: 'self',
+            reflectToAttribute: true
+          },
         },
 
-
-        created: function(){
-          document.addEventListener('asq-ready', function(evt){
-            try{
-              this.subscribeToEvents(evt.detail.asqEventBus)
-            }catch(err){
-              console.debug('failed to subscribeToEvents');
+        created: function () {
+          document.addEventListener('asq-ready', function (evt) {
+            try {
+              this._subscribeToEvents(evt.detail.asqEventBus);
+            } catch (err) {
+              console.debug('failed to _subscribeToEvents');
             }
           }.bind(this));
         },
 
-        subscribeToEvents: function(eventBus){
-          eventBus.on('asq:update_live_presentation_settings', this.onUpdateSettings.bind(this));
+        _subscribeToEvents: function (eventBus) {
+          eventBus.on('asq:update_live_presentation_settings', this._onUpdateSettings.bind(this));
         },
 
-        onUpdateSettings: function(evt) {
-          if ( evt.scope === 'presentation' ) {
+        _onUpdateSettings: function (evt) {
+          if (evt.scope === 'presentation') {
             var settings = evt.settings;
-            Object.keys(settings).forEach(function(key, index){
-              if ( this.hasAttributes(key) ) {
+            Object.keys(settings).forEach(function (key, index) {
+              if (this.hasAttributes(key)) {
                 this.setAttribute(key.toLowerCase(), settings[key]);
                 this[key] = settings[key];
               }
             }, this);
           }
         }
-      }
-      
-      ASQ.asqify(p);
-      Polymer('asq-settings', p);
-
-    })();
+      });
+    }());
   </script>
-</polymer-element>
+</dom-module>
